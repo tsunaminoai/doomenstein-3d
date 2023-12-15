@@ -1,11 +1,13 @@
 print-%:; @echo $($*)
 
-CC = gcc
-LD = gcc
+CC = zig cc
+LD = zig cc
 
 # library paths
-PATH_LIB = lib
-PATH_SDL = $(PATH_LIB)/SDL
+PATH_LIB = /opt/homebrew/opt/
+PATH_SDL = $(PATH_LIB)/sdl2
+# PATH_LIB = lib
+# PATH_SDL = $(PATH_LIB)/SDL
 
 INCFLAGS = -iquotesrc
 
@@ -47,15 +49,9 @@ OUT = $(BIN)/game
 -include $(DEP)
 
 UNAME := $(shell uname -s)
-ifeq ($(UNAME),Darwin)
-	CC = $(shell brew --prefix llvm)/bin/clang
-	LD = $(shell brew --prefix llvm)/bin/clang
 
 	INCFLAGS += -I$(PATH_SDL)/include
-	LDFLAGS += $(shell $(BIN)/sdl/sdl2-config --prefix=$(BIN) --static-libs)
-else ifeq ($(UNAME),Linux)
-	LDFLAGS += -lSDL2
-endif
+	LDFLAGS += -lSDL2 -L$(PATH_SDL)/lib
 
 $(BIN):
 	mkdir -p $@
